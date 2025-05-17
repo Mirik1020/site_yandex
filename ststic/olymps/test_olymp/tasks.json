@@ -1,0 +1,15 @@
+{
+  "task1": {
+    "image": "images/task_image1.png",
+    "right_ans": "123",
+    "type": "test",
+    "anses": [
+      "1","123","31"
+    ]
+  },
+  "task2": {
+    "image": "images/task_image2.png",
+    "right_ans": "123",
+    "type": "digit"
+  }
+}
