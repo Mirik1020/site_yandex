@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+<!--		 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />-->
+		<link rel="stylesheet" href="/static/styles.css" />
+		<title>login page</title>
+	</head>
+	<body>
+		<form method="POST" action="/logined">
+			<div class="box-one">
+				<div class="input">
+					<input type="text" placeholder="Login" name="login" class="inputinto">
+				</div>
+				<div class="input">
+					<input type="password" placeholder="Password" name="password" class="inputinto">
+				</div>
+				<div class = "button">
+					<input type="submit" value="Войти" class="buttoninto">			
+				</div>
+				<div class="text">
+					<a href="/register">Нет аккаунта? Зарегестрируйся!</a>
+				</div>
+			</div>
+		</form>
+	</body>
+</html>

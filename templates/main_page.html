@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Example</title>
+</head>
+<body>
+    <form method="POST" action="/login">
+        {% if flag %}
+            <input type="submit" value="Вход">
+        {% else %}
+            <input type="submit" value="Выход">
+        {% endif %}
+    </form>
+    <p>Под пользователем {{name}}</p>
+
+    {% if name == ':без входа' %}
+        <p>Чтобы учавствоть в олимпиадах нужно войти.</p>
+    {% else %}
+        <p>Олимпиады</p>
+        <form method="POST" action="/olymp1">
+            <select name="olymps">
+                {% for item in olymps %}
+                    <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+
+            </select>
+            <input type="submit" value="Начать олимпиаду">
+        </form>
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <img src="{{ src }}" >
+    <form method="POST" action="/olymp">
+        <input type="submit" value="вперед">
+    </form>
+    {% if page > 1 %}
+        <form method="POST" action="/olymbet">
+            <input type="submit" value="назад">
+        </form>
+    {% endif %}
+    {% block content %}{% endblock %}
+
+
+</body>
+</html>
