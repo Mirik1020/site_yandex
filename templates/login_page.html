@@ -7,13 +7,18 @@
 		<title>login page</title>
 	</head>
 	<body>
+		<form method="POST" action="/unlogined">
+			<div class = "button2">
+				<input type="submit" value="Вернуться ↩" class="buttoninto2">
+			</div>
+		</form>
 		<form method="POST" action="/logined">
 			<div class="box-one">
 				<div class="input">
-					<input type="text" placeholder="Login" name="login" class="inputinto">
+					<input type="text" placeholder="логин" name="login" class="inputinto">
 				</div>
 				<div class="input">
-					<input type="password" placeholder="Password" name="password" class="inputinto">
+					<input type="password" placeholder="пароль" name="password" class="inputinto">
 				</div>
 				<div class = "button">
 					<input type="submit" value="Войти" class="buttoninto">			

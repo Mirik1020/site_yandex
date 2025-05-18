@@ -34,6 +34,12 @@ def index():
     return render_template('main_page.html', name=":без входа", olymps=tmp, flag=True)
 
 
+@app.route('/unlogined', methods=['POST'])
+def unlogined():
+    tmp = os.listdir('static/olymps')
+    return render_template('main_page.html', name=":без входа", olymps=tmp, flag=True)
+
+
 @app.route('/logined', methods=['POST'])
 def logined():
     login = request.form.get('login')
@@ -59,13 +65,15 @@ def logined():
                 WHERE min_grade <= {grade[0][0]} AND {grade[0][0]} <= max_grade""").fetchall()
     tmp = [i[0] for i in tmp]
     if password2[0][0] == password:
+        # вход
         u.name = name[0][0]
         u.surname = surname[0][0]
         return render_template('main_page.html', name=f'{name[0][0]} {surname[0][0]}', olymps=tmp, flag=False)
-
     elif u.name and u.surname:
+        # вход повторный
         return render_template('main_page.html', name=f'{u.name} {u.surname}', olymps=tmp, flag=False)
     else:
+        # войти не получилось
         return render_template('failed_login_page.html')
 
 
@@ -91,12 +99,15 @@ def registered():
     cur = con.cursor()
     is_there_user = cur.execute(f"""SELECT * from users where login = '{data[2]}'""").fetchall()
     if is_there_user:
+        # такой пользователь уже есть при регистрации
         return render_template('failed_register_page.html', alert="Пользователь с таким логином уже есть")
     if data[4] != data[5]:
+        # пароли не совпадают при регистрации
         return render_template('failed_register_page.html', alert="Пароли не совпадают")
     cur.execute(f"""INSERT INTO users
                     VALUES ('{data[0]}', '{data[1]}', '{data[2]}', {data[3]}, '{data[4]}')""")
     con.commit()
+    # регистрация прошла успешно
     return render_template('login_page.html')
 
 
@@ -114,19 +125,23 @@ def olymp_first_page():
     print(len(tasks))
 
     if type1 == "test":
+        # тип задания тест
         anses = tasks[f"task{str(ol.page)}"]["anses"]
         return render_template('test_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                ans=anses, last_ans=ol.last_ans[ol.page - 1])
     elif type1 == "digit":
+        # тип задания ввод числа
         return render_template('digit_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     elif type1 == "hand":
+        # тип задания c ручной проверкой
         return render_template('input_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     else:
+        # резервный вариант
         return render_template('task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page)
 
@@ -138,30 +153,35 @@ def olymp_page():
         tasks = json.load(file)
     print(tasks, ol.olymp)
     if ol.page == len(tasks) + 1:
+        # сохранение результата
         res = dict()
         res['user'] = u.login
         res['result'] = ol.tasks
         print(res)
-        with open('results/result.json', 'w') as jso:
+        with open(f'results/result{u.login}.json', 'w') as jso:
             json.dump(res, jso)
         return render_template('last_olymp_page.html')
     type1 = tasks[f"task{str(ol.page)}"]["type"]
     print(type1)
     print(request.form)
     if type1 == "test":
+        # тип задания тест
         anses = tasks[f"task{str(ol.page)}"]["anses"]
         return render_template('test_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                ans=anses, last_ans=ol.last_ans[ol.page - 1])
     elif type1 == "digit":
+        # тип задания ввод числа
         return render_template('digit_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     elif type1 == "hand":
+        # тип задания c ручной проверкой
         return render_template('input_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     else:
+        # резервный вариант
         return render_template('task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page)
 
@@ -178,19 +198,23 @@ def olymp_page_bet():
     print(type1)
     print(request.form)
     if type1 == "test":
+        # тип задания тест
         anses = tasks[f"task{str(ol.page)}"]["anses"]
         return render_template('test_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                ans=anses, last_ans=ol.last_ans[ol.page - 1])
     elif type1 == "digit":
+        # тип задания ввод числа
         return render_template('digit_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     elif type1 == "hand":
+        # тип задания c ручной проверкой
         return render_template('input_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     else:
+        # резервный вариант
         return render_template('task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page)
 
@@ -210,22 +234,26 @@ def save_page():
     elif type1 == "hand":
         ol.tasks[ol.page - 1] = q
     if type1 == "test":
+        # тип задания тест
         anses = tasks[f"task{str(ol.page)}"]["anses"]
         ol.last_ans[ol.page - 1] = tasks[f"task{str(ol.page)}"]["anses"].index(q)
         return render_template('test_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                ans=anses, last_ans=ol.last_ans[ol.page - 1])
     elif type1 == "digit":
+        # тип задания ввод числа
         ol.last_ans[ol.page - 1] = q
         return render_template('digit_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     elif type1 == "hand":
+        # тип задания c ручной проверкой
         ol.last_ans[ol.page - 1] = q
         return render_template('input_task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page,
                                inp=ol.last_ans[ol.page - 1])
     else:
+        # резервный вариант
         return render_template('task_page.html',
                                src=f'static/olymps/{ol.olymp}/{tasks[f"task{str(ol.page)}"]["image"]}', page=ol.page)
 
